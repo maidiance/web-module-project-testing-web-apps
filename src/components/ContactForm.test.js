@@ -123,4 +123,36 @@ test('renders all firstName, lastName and email text when submitted. Does NOT re
 });
 
 test('renders all fields text when all fields are submitted.', async () => {
+    render(<ContactForm />);
+    // set test inputs
+    const testFirstName = 'testFirstName';
+    const testLastName = 'testLastName';
+    const testEmail = 'test@test.com';
+    const testMessage = 'testMessage';
+    // get elements
+    const firstName = await screen.getByLabelText(/First Name*/i);
+    const lastName = await screen.getByLabelText(/Last Name*/i);
+    const email = await screen.getByLabelText(/Email*/i);
+    const message = await screen.getByLabelText(/Message/i);
+    // type test inputs
+    userEvent.type(firstName, testFirstName);
+    userEvent.type(lastName, testLastName);
+    userEvent.type(email, testEmail);
+    userEvent.type(message, testMessage);
+    // get and click button
+    const button = await screen.getByRole('button');
+    userEvent.click(button);
+    // find expected elements
+    const submittedFirstName = await screen.getByTestId(/firstnameDisplay/i);
+    expect(submittedFirstName).toBeInTheDocument();
+    expect(submittedFirstName).toHaveTextContent(testFirstName);
+    const submittedLastName = await screen.getByTestId(/lastNameDisplay/i);
+    expect(submittedLastName).toBeInTheDocument();
+    expect(submittedLastName).toHaveTextContent(testLastName);
+    const submittedEmail = await screen.getByTestId(/emailDisplay/i);
+    expect(submittedEmail).toBeInTheDocument();
+    expect(submittedEmail).toHaveTextContent(testEmail);
+    const submittedMessage = await screen.getByTestId(/messageDisplay/i);
+    expect(submittedMessage).toBeInTheDocument();
+    expect(submittedMessage).toHaveTextContent(testMessage);
 });
